@@ -39,15 +39,13 @@ public class AlloyDBEmbeddingStoreWithMetadataExample {
                 .ipType("public")
                 .build();
 
-        engine.getConnection().createStatement().executeUpdate(String.format(
-            "DROP TABLE IF EXISTS \"%s\"", TABLE_NAME));
-                
         List<MetadataColumn> metadataColumns = new ArrayList<>();
         metadataColumns.add(new MetadataColumn("userId", "uuid", true));
 
         EmbeddingStoreConfig embeddingStoreConfig = new EmbeddingStoreConfig.Builder(TABLE_NAME, VECTOR_SIZE)
                 .metadataColumns(metadataColumns)
                 .storeMetadata(true)
+                .overwriteExisting(true)
                 .build();
 
         engine.initVectorStoreTable(embeddingStoreConfig);
