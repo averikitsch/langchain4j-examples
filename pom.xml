@@ -46,6 +46,7 @@
         <module>quarkus-example</module>
         <module>oracle-example</module>
         <module>voyage-ai-examples</module>
+        <module>google-alloydb-example</module>
     </modules>
 
 </project>
