@@ -75,25 +75,25 @@ public class PostgresEmbeddingStoreWithMetadataExample {
                 .maxResults(1)
                 .build();
         EmbeddingSearchResult<TextSegment> searchResult = embeddingStore.search(searchRequest);
+        
+        System.out.println("Unfiltered match:");
+        System.out.println(embeddingMatch.score());
+        System.out.println(embeddingMatch.embedded().text());
 
-                System.out.println("Unfiltered match:");
-                System.out.println(embeddingMatch.score());
-                System.out.println(embeddingMatch.embedded().text());
+        // Search embedding store with filter
+        Filter onlyForUser1 = metadataKey("userId").isEqualTo(user1);
 
-                // Search embedding store with filter
-                Filter onlyForUser1 = metadataKey("userId").isEqualTo(user1);
+        EmbeddingSearchRequest embeddingSearchRequest1 = EmbeddingSearchRequest.builder()
+                        .queryEmbedding(queryEmbedding).filter(onlyForUser1).build();
 
-                EmbeddingSearchRequest embeddingSearchRequest1 = EmbeddingSearchRequest.builder()
-                                .queryEmbedding(queryEmbedding).filter(onlyForUser1).build();
+        EmbeddingSearchResult<TextSegment> embeddingSearchResult1 =
+                        embeddingStore.search(embeddingSearchRequest1);
+        EmbeddingMatch<TextSegment> embeddingMatch1 =
+                        embeddingSearchResult1.matches().get(0);
+        System.out.println("Filtered match:");
+        System.out.println(embeddingMatch1.score());
+        System.out.println(embeddingMatch1.embedded().text());
 
-                EmbeddingSearchResult<TextSegment> embeddingSearchResult1 =
-                                embeddingStore.search(embeddingSearchRequest1);
-                EmbeddingMatch<TextSegment> embeddingMatch1 =
-                                embeddingSearchResult1.matches().get(0);
-                System.out.println("Filtered match:");
-                System.out.println(embeddingMatch1.score());
-                System.out.println(embeddingMatch1.embedded().text());
-
-                engine.close();
+        engine.close();
     }
 }
